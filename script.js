@@ -44,6 +44,7 @@ buttonLikeEl.addEventListener("click", ()=>{
   })
   .then(res => console.log(res.ok));
 
+  
   // fetch(`https://api.unsplash.com/me`, {
   //   method: "GET",
   //   headers: {
