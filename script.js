@@ -39,7 +39,7 @@ async function loadPhoto() {
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", ()=>{
-  fetch(`https://unsplash.com/oauth/authorize?redirect_uri=http://127.0.0.1:5500/Lesson3/index.html&client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk&response_type=code&scope=write_likes`, {
+  fetch(`https://unsplash.com/oauth/authorize?redirect_uri=https://valentin447.github.io/cors_test/&client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk&response_type=code&scope=write_likes`, {
     method: "POST",
   })
   .then(res => console.log(res.ok));
