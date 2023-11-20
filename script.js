@@ -21,13 +21,12 @@ const grantType = "authorization_code";
 
 console.log(`code = ${code}`);
 if(code){
-  console.log("1111");
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
     {
       method: "POST",
     }
-  ).then((res) => console.log(res.ok));
+  ).then((res) => console.log(res));
 }
 
 
