@@ -23,7 +23,7 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 26`);
+console.log(`версия = 27`);
 if (code) {
   console.log("20) Новый токен")
   fetch(
@@ -42,6 +42,7 @@ if (code) {
         console.log("new token" + data.access_token);
         console.log("+++++++++++++++");
         console.log("new cookie" + document.cookie);
+        authorization = data.access_token;
       }
     });
 }
