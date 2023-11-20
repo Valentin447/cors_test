@@ -19,7 +19,9 @@ const redirectURI = "https://valentin447.github.io/cors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
+console.log(`code = ${code}`);
 if(code){
+  console.log("1111");
   fetch(
     `https://unsplash.com/oauth/token?
     client_id=${clientId}&
@@ -31,9 +33,8 @@ if(code){
       method: "POST",
     }
   ).then((res) => console.log(res.ok));
-  
 }
-console.log(`code = ${code}`);
+
 
 async function fetchPhotos() {
   try {
