@@ -10,6 +10,7 @@ const testEl = document.querySelector(".test");
 
 let photoID = "";
 let photo = undefined;
+let photoIsLiked = false;
 
 const urlParams = document.location.search;
 const searchParams = new URLSearchParams(urlParams);
@@ -21,7 +22,7 @@ const redirectURI = "https://valentin447.github.io/cors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 16`);
+console.log(`версия = 17`);
 if (code) {
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
@@ -42,10 +43,6 @@ if (code) {
 
 async function fetchPhotos() {
   let authorization = getTokenFromCookie();
-
-  console.log(`cookie = ${document.cookie}`);
-  console.log(`authorization = ${authorization}`);
-
   try {
     const response = await fetch(
       `https://api.unsplash.com/photos/random?client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk`,
@@ -58,7 +55,7 @@ async function fetchPhotos() {
     );
 
     const photos = await response.json();
-
+    
     return photos;
   } catch (error) {
     console.error("Ошибка при загрузке фотографий:", error);
@@ -76,32 +73,38 @@ async function loadPhoto() {
   textAutorEl.textContent = `Имя фотографа: ${photo.user.name}.`;
   buttonLikeEl.textContent = `Поставить лайк`;
   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
+
 }
 
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
-  // if (buttonLikeEl.textContent === "Поставить лайк") {
-  //   buttonLikeEl.textContent = `Убрать лайк`;
-  //   quantityLikeEl.textContent = `Лайков: ${photo.likes + 1}`;
-  // } else {
-  //   buttonLikeEl.textContent = `Поставить лайк`;
-  //   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
-  // }
+  if(getTokenFromCookie()){
+    fetch(
+      `https://unsplash.com/photos/${photoID}/like`,
+      {
+        method: "POST",
+      }
+    ).then(res => {
+      if(res.ok){
 
-  window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
+      }
+    });
 
-  // fetch(
-  //   `https://unsplash.com/oauth/authorize?redirect_uri=urn:ietf:wg:oauth:2.0:oob&client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk&response_type=code&scope=write_likes`,
-  //   {
-  //     method: "POST",
-  //   }
-  // ).then((res) => console.log(res.ok));
+  } else {
+    window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
+  }
+  if (buttonLikeEl.textContent === "Поставить лайк") {
+    buttonLikeEl.textContent = `Убрать лайк`;
+    quantityLikeEl.textContent = `Лайков: ${photo.likes + 1}`;
+  } else {
+    buttonLikeEl.textContent = `Поставить лайк`;
+    quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
+  }
 });
 
 testEl.addEventListener("click", () => {
-  console.log(document.cookie);
-  console.log(getTokenFromCookie());
+  console.log(photo);
 
 });
 
