@@ -19,28 +19,40 @@ const redirectURI = "https://valentin447.github.io/cors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 14`);
-if(code){
+console.log(`версия = 15`);
+if (code) {
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
     {
       method: "POST",
     }
   )
-  .then(res => res.json())
-  .then(data => {
-    console.log(data.access_token);
-    console.log("+++++++++++++++");
-    console.log(document.cookie);
-  });
-
+    .then((res) => res.json())
+    .then((data) => {
+      console.log(data.access_token);
+      console.log("+++++++++++++++");
+      console.log(document.cookie);
+      if (data.access_token) {
+        document.cookie = `access_token=${data.access_token}`;
+      }
+    });
 }
 
-
 async function fetchPhotos() {
+  let authorization = getTokenFromCookie();
+
+  console.log(`cookie = ${document.cookie}`);
+  console.log(`authorization = ${authorization}`);
+
   try {
     const response = await fetch(
-      `https://api.unsplash.com/photos/random?client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk`
+      `https://api.unsplash.com/photos/random?client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk`,
+      {
+        method: "GET",
+        headers: {
+          Authorization: authorization,
+        },
+      }
     );
 
     const photos = await response.json();
@@ -74,7 +86,7 @@ buttonLikeEl.addEventListener("click", () => {
   //   buttonLikeEl.textContent = `Поставить лайк`;
   //   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
   // }
-  
+
   window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
 
   // fetch(
@@ -84,3 +96,14 @@ buttonLikeEl.addEventListener("click", () => {
   //   }
   // ).then((res) => console.log(res.ok));
 });
+
+function getTokenFromCookie() {
+  const cookies = document.cookie.split(";");
+  for (const cookie of cookies) {
+    const cookieArr = cookie.split("=");
+    if (cookieArr[0] === "access_token") {
+      return cookieArr[1];
+    }
+  }
+  return "";
+}
