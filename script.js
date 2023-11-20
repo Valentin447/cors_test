@@ -24,7 +24,7 @@ const scope = "public+write_likes";
 const grantType = "authorization_code";
 
 
-console.log(`версия = 29`);
+console.log(`версия = 30`);
 
 
 if (code) {
@@ -85,7 +85,7 @@ async function loadPhoto() {
   buttonLikeEl.textContent = `Поставить лайк`;
   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
 }
-
+loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
   console.log(`1) getTokenFromCookie() = ${getTokenFromCookie()}`);
