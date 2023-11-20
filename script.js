@@ -11,6 +11,7 @@ const testEl = document.querySelector(".test");
 let photoID = "";
 let photo = undefined;
 let photoIsLiked = false;
+let authorization = getTokenFromCookie();
 
 const urlParams = document.location.search;
 const searchParams = new URLSearchParams(urlParams);
@@ -22,7 +23,7 @@ const redirectURI = "https://valentin447.github.io/cors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 18`);
+console.log(`версия = 19`);
 if (code) {
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
@@ -42,7 +43,7 @@ if (code) {
 }
 
 async function fetchPhotos() {
-  let authorization = getTokenFromCookie();
+  
   try {
     const response = await fetch(
       `https://api.unsplash.com/photos/random?client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk`,
