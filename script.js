@@ -13,6 +13,26 @@ const urlParams = document.location.search;
 const searchParams = new URLSearchParams(urlParams);
 const code = searchParams.get("code");
 
+const clientSecret = "QcB-w_xhUOvQoxR9WwVfTGzKA2ltGO0a-WBlJsTx4D4";
+const clientId = "SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk";
+const redirectURI = "https://valentin447.github.io/cors_test";
+const scope = "public+write_likes";
+const grantType = "authorization_code";
+
+if(code){
+  fetch(
+    `https://unsplash.com/oauth/token?
+    client_id=${clientId}&
+    client_secret=${clientSecret}&
+    redirect_uri=${redirectURI}&
+    code=${code}&
+    grant_type=${grantType}`,
+    {
+      method: "POST",
+    }
+  ).then((res) => console.log(res.ok));
+  
+}
 console.log(`code = ${code}`);
 
 async function fetchPhotos() {
@@ -52,9 +72,7 @@ buttonLikeEl.addEventListener("click", () => {
   //   buttonLikeEl.textContent = `Поставить лайк`;
   //   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
   // }
-  const clientId = "SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk";
-  const redirectURI = "https://valentin447.github.io/cors_test";
-  const scope = "public+write_likes"
+  
   window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
 
   // fetch(
