@@ -6,6 +6,8 @@ const textAutorEl = document.querySelector(".details__text-autor");
 const buttonLikeEl = document.querySelector(".details__button-like");
 const quantityLikeEl = document.querySelector(".details__like-quantity");
 
+const testEl = document.querySelector(".test");
+
 let photoID = "";
 let photo = undefined;
 
@@ -19,7 +21,7 @@ const redirectURI = "https://valentin447.github.io/cors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 15`);
+console.log(`версия = 16`);
 if (code) {
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
@@ -33,7 +35,7 @@ if (code) {
       console.log("+++++++++++++++");
       console.log(document.cookie);
       if (data.access_token) {
-        document.cookie = `access_token=${data.access_token}`;
+        // document.cookie = `access_token=${data.access_token}`;
       }
     });
 }
@@ -95,6 +97,12 @@ buttonLikeEl.addEventListener("click", () => {
   //     method: "POST",
   //   }
   // ).then((res) => console.log(res.ok));
+});
+
+testEl.addEventListener("click", () => {
+  console.log(document.cookie);
+  console.log(getTokenFromCookie());
+
 });
 
 function getTokenFromCookie() {
