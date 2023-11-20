@@ -22,7 +22,7 @@ const scope = "public+write_likes";
 const grantType = "authorization_code";
 
 
-console.log(`версия = 34`);
+console.log(`версия = 35`);
 
 
 if (code) {
@@ -128,6 +128,6 @@ function getTokenFromCookie() {
 
 function setLocalStorage(photo){
   console.log(`50) setLocalStorage`);
-  window.localStorage.setItem("photo", JSON.stringify({photoID: photo.id, url: photo.urls.regular, likes: photo.likes, userName: photo.user.name, alt: photo.alt_description}));
+  window.localStorage.setItem("photo", JSON.stringify({id: photo.id, url: photo.urls.regular, likes: photo.likes, userName: photo.user.name, alt: photo.alt_description}));
   console.log(`51) setLocalStorage`);
 }
