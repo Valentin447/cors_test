@@ -22,7 +22,7 @@ const scope = "public+write_likes";
 const grantType = "authorization_code";
 
 
-console.log(`версия = 31`);
+console.log(`версия = 32`);
 
 
 if (code) {
@@ -49,8 +49,6 @@ if (code) {
 }
 
 async function fetchPhotos() {
-  
-  
   try {
     const response = await fetch(
       `https://api.unsplash.com/photos/random?client_id=${clientId}`,
@@ -61,11 +59,7 @@ async function fetchPhotos() {
         },
       }
     );
-
     const photo = await response.json();
-    
-
-    
     return photo;
   } catch (error) {
     console.error("Ошибка при загрузке фотографий:", error);
@@ -76,17 +70,19 @@ async function fetchPhotos() {
 async function loadPhoto() {
   console.log("40) localStorage.length" + localStorage.length);
   console.log("41) localStorage.getItem('photo')" + localStorage.getItem("photo"));
-  if(localStorage.lenght === 0){
-    setLocalStorage(await fetchPhotos());
-    console.log("42) localStorage.getItem('photo')" + localStorage.getItem("photo"));
-  } 
-  imgEl.src = localStorage.getItem("photo").url;
-  imgEl.alt = localStorage.getItem("photo").alt;
-
-  textAutorEl.textContent = `Имя фотографа: ${localStorage.getItem("photo").userName}.`;
-  buttonLikeEl.textContent = `Поставить лайк`;
-  quantityLikeEl.textContent = `Лайков: ${localStorage.getItem("photo").likes}`;
+  await fetchPhotos().then(res=>{
+    setLocalStorage(res);
+    imgEl.src = localStorage.getItem("photo").url;
+    imgEl.alt = localStorage.getItem("photo").alt;
+    textAutorEl.textContent = `Имя фотографа: ${localStorage.getItem("photo").userName}.`;
+    buttonLikeEl.textContent = `Поставить лайк`;
+    quantityLikeEl.textContent = `Лайков: ${localStorage.getItem("photo").likes}`;
+  });
 }
+if(localStorage.lenght === 0){
+  await 
+  console.log("42) localStorage.getItem('photo')" + localStorage.getItem("photo"));
+} 
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
@@ -135,5 +131,7 @@ function getTokenFromCookie() {
 }
 
 function setLocalStorage(photo){
+  console.log(`50) setLocalStorage`);
   window.localStorage.setItem("photo", {photoID: photo.id, url: photo.urls.regular, likes: photo.likes, userName: photo.user.name, alt: photo.alt_description});
+  console.log(`51) setLocalStorage`);
 }
