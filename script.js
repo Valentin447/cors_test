@@ -23,8 +23,9 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 25`);
+console.log(`версия = 26`);
 if (code) {
+  console.log("20) Новый токен")
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
     {
@@ -37,7 +38,10 @@ if (code) {
       console.log("+++++++++++++++");
       console.log(document.cookie);
       if (data.access_token) {
-        // document.cookie = `access_token=${data.access_token}`;
+        document.cookie = `access_token=${data.access_token}`;
+        console.log("new token" + data.access_token);
+        console.log("+++++++++++++++");
+        console.log("new cookie" + document.cookie);
       }
     });
 }
@@ -112,8 +116,7 @@ buttonLikeEl.addEventListener("click", () => {
 });
 
 testEl.addEventListener("click", () => {
-  console.log(photo);
-
+  window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
 });
 
 function getTokenFromCookie() {
