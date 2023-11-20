@@ -9,6 +9,12 @@ const quantityLikeEl = document.querySelector(".details__like-quantity");
 let photoID = "";
 let photo = undefined;
 
+const urlParams = document.location.search;
+const searchParams = new URLSearchParams(urlParams);
+const code = searchParams.get("code");
+
+console.log(`code = ${code}`);
+
 async function fetchPhotos() {
   try {
     const response = await fetch(
@@ -26,13 +32,11 @@ async function fetchPhotos() {
 
 async function loadPhoto() {
   const response = await fetchPhotos();
-  console.log(response);
   photo = response;
   imgEl.src = photo.urls.regular;
   imgEl.alt = photo.alt_description;
 
   photoID = photo.id;
-  console.log(photoID);
   textAutorEl.textContent = `Имя фотографа: ${photo.user.name}.`;
   buttonLikeEl.textContent = `Поставить лайк`;
   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
@@ -49,7 +53,7 @@ buttonLikeEl.addEventListener("click", () => {
   //   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
   // }
   const clientId = "SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk";
-  const redirectURI = "https://valentin447.github.io/cors_test/";
+  const redirectURI = "https://valentin447.github.io/cors_test";
   const scope = "public+write_likes"
   window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
 
