@@ -48,8 +48,10 @@ buttonLikeEl.addEventListener("click", () => {
   //   buttonLikeEl.textContent = `Поставить лайк`;
   //   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
   // }
-
-  window.location.href = "https://unsplash.com/oauth/authorize?redirect_uri=urn:ietf:wg:oauth:2.0:oob&client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk&response_type=code&scope=write_likes";
+  const clientId = "SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk";
+  const redirectURI = "https://valentin447.github.io/cors_test/";
+  const scope = "public+write_likes"
+  window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
 
   // fetch(
   //   `https://unsplash.com/oauth/authorize?redirect_uri=urn:ietf:wg:oauth:2.0:oob&client_id=SQU1x6MlVVkxobfip8bz8QiqOgKidozss96_wIgxFDk&response_type=code&scope=write_likes`,
