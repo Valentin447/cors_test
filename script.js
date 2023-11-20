@@ -23,7 +23,10 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 28`);
+
+console.log(`версия = 29`);
+
+
 if (code) {
   console.log("20) Новый токен")
   fetch(
@@ -60,18 +63,20 @@ async function fetchPhotos() {
       }
     );
 
-    const photos = await response.json();
+    const photo = await response.json();
     
-    return photos;
+    return photo;
   } catch (error) {
     console.error("Ошибка при загрузке фотографий:", error);
-    return [];
+    return undefined;
   }
 }
 
 async function loadPhoto() {
-  const response = await fetchPhotos();
-  photo = response;
+  if(photo === undefined){
+    const response = await fetchPhotos();
+    photo = response;
+  } 
   imgEl.src = photo.urls.regular;
   imgEl.alt = photo.alt_description;
 
@@ -79,10 +84,8 @@ async function loadPhoto() {
   textAutorEl.textContent = `Имя фотографа: ${photo.user.name}.`;
   buttonLikeEl.textContent = `Поставить лайк`;
   quantityLikeEl.textContent = `Лайков: ${photo.likes}`;
-
 }
 
-loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
   console.log(`1) getTokenFromCookie() = ${getTokenFromCookie()}`);
@@ -99,9 +102,7 @@ buttonLikeEl.addEventListener("click", () => {
         },
       }
     ).then(res => {
-      if(res.ok){
-
-      }
+      console.log("30) Ответ сервера " + res);
     });
 
   } else {
