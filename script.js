@@ -22,7 +22,7 @@ const scope = "public+write_likes";
 const grantType = "authorization_code";
 
 
-console.log(`версия = 33`);
+console.log(`версия = 34`);
 
 
 if (code) {
@@ -69,7 +69,6 @@ async function fetchPhotos() {
 
 async function loadPhoto() {
   console.log("40) localStorage.length" + localStorage.length);
-  console.log("41) localStorage.getItem('photo')" + JSON.parse(localStorage.getItem("photo")));
   await fetchPhotos().then(res=>{
     setLocalStorage(res);
     imgEl.src = JSON.parse(localStorage.getItem("photo")).url;
@@ -77,12 +76,9 @@ async function loadPhoto() {
     textAutorEl.textContent = `Имя фотографа: ${JSON.parse(localStorage.getItem("photo")).userName}.`;
     buttonLikeEl.textContent = `Поставить лайк`;
     quantityLikeEl.textContent = `Лайков: ${JSON.parse(localStorage.getItem("photo")).likes}`;
+    console.log("41) localStorage.getItem('photo')" + JSON.parse(localStorage.getItem("photo")));
   });
 }
-if(localStorage.lenght === 0){
-  await 
-  console.log("42) localStorage.getItem('photo')" + JSON.parse(localStorage.getItem("photo")));
-} 
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
