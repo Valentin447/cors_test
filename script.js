@@ -23,7 +23,7 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 20`);
+console.log(`версия = 21`);
 if (code) {
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
@@ -84,6 +84,7 @@ buttonLikeEl.addEventListener("click", () => {
     fetch(
       `https://unsplash.com/photos/${photoID}/like`,
       {
+        mode: 'no-cors',
         method: "POST",
         headers: {
           Authorization: authorization,
