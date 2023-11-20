@@ -22,7 +22,7 @@ const scope = "public+write_likes";
 const grantType = "authorization_code";
 
 
-console.log(`версия = 32`);
+console.log(`версия = 33`);
 
 
 if (code) {
@@ -69,19 +69,19 @@ async function fetchPhotos() {
 
 async function loadPhoto() {
   console.log("40) localStorage.length" + localStorage.length);
-  console.log("41) localStorage.getItem('photo')" + localStorage.getItem("photo"));
+  console.log("41) localStorage.getItem('photo')" + JSON.parse(localStorage.getItem("photo")));
   await fetchPhotos().then(res=>{
     setLocalStorage(res);
-    imgEl.src = localStorage.getItem("photo").url;
-    imgEl.alt = localStorage.getItem("photo").alt;
-    textAutorEl.textContent = `Имя фотографа: ${localStorage.getItem("photo").userName}.`;
+    imgEl.src = JSON.parse(localStorage.getItem("photo")).url;
+    imgEl.alt = JSON.parse(localStorage.getItem("photo")).alt;
+    textAutorEl.textContent = `Имя фотографа: ${JSON.parse(localStorage.getItem("photo")).userName}.`;
     buttonLikeEl.textContent = `Поставить лайк`;
-    quantityLikeEl.textContent = `Лайков: ${localStorage.getItem("photo").likes}`;
+    quantityLikeEl.textContent = `Лайков: ${JSON.parse(localStorage.getItem("photo")).likes}`;
   });
 }
 if(localStorage.lenght === 0){
   await 
-  console.log("42) localStorage.getItem('photo')" + localStorage.getItem("photo"));
+  console.log("42) localStorage.getItem('photo')" + JSON.parse(localStorage.getItem("photo")));
 } 
 loadPhoto();
 
@@ -91,7 +91,7 @@ buttonLikeEl.addEventListener("click", () => {
   console.log(`3) cookis = ${document.cookie}`)
   if(getTokenFromCookie()){
     fetch(
-      `https://api.unsplash.com/photos/${localStorage.getItem("photo").id}/like?client_id=${clientId}`,
+      `https://api.unsplash.com/photos/${JSON.parse(localStorage.getItem("photo")).id}/like?client_id=${clientId}`,
       {
         method: "POST",
         headers: {
@@ -108,10 +108,10 @@ buttonLikeEl.addEventListener("click", () => {
   }
   if (buttonLikeEl.textContent === "Поставить лайк") {
     buttonLikeEl.textContent = `Убрать лайк`;
-    quantityLikeEl.textContent = `Лайков: ${localStorage.getItem("photo").likes + 1}`;
+    quantityLikeEl.textContent = `Лайков: ${JSON.parse(localStorage.getItem("photo")).likes + 1}`;
   } else {
     buttonLikeEl.textContent = `Поставить лайк`;
-    quantityLikeEl.textContent = `Лайков: ${localStorage.getItem("photo").likes}`;
+    quantityLikeEl.textContent = `Лайков: ${JSON.parse(localStorage.getItem("photo")).likes}`;
   }
 });
 
@@ -132,6 +132,6 @@ function getTokenFromCookie() {
 
 function setLocalStorage(photo){
   console.log(`50) setLocalStorage`);
-  window.localStorage.setItem("photo", {photoID: photo.id, url: photo.urls.regular, likes: photo.likes, userName: photo.user.name, alt: photo.alt_description});
+  window.localStorage.setItem("photo", JSON.stringify({photoID: photo.id, url: photo.urls.regular, likes: photo.likes, userName: photo.user.name, alt: photo.alt_description}));
   console.log(`51) setLocalStorage`);
 }
