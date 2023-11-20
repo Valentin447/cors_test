@@ -11,7 +11,7 @@ const testEl = document.querySelector(".test");
 let photoID = "";
 let photo = undefined;
 let photoIsLiked = false;
-let authorization = getTokenFromCookie();
+let authorization =`Bearer ${getTokenFromCookie()}`;
 
 const urlParams = document.location.search;
 const searchParams = new URLSearchParams(urlParams);
@@ -23,7 +23,7 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 27`);
+console.log(`версия = 28`);
 if (code) {
   console.log("20) Новый токен")
   fetch(
@@ -42,7 +42,7 @@ if (code) {
         console.log("new token" + data.access_token);
         console.log("+++++++++++++++");
         console.log("new cookie" + document.cookie);
-        authorization = data.access_token;
+        authorization =`Bearer ${data.access_token}`;
       }
     });
 }
