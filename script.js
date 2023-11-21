@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 54`);
+console.log(`версия = 55`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -125,9 +125,9 @@ function getTokenFromCookie() {
   for (const cookie of cookies) {
     console.log("62) " + cookie);
     const cookieArr = cookie.split("=");
-    console.log("63) " + cookieArr);
+    console.log("63) " + typeof(cookieArr[0]));
     console.log(`66) ${String(cookieArr[0])} === "access_token" -> ${String(cookieArr[0]) === "access_token"}`)
-    if (String(cookieArr[0]) === "access_token") {
+    if (cookieArr[0] === "access_token") {
       console.log("64) " + cookieArr[1]);
       return cookieArr[1];
     }
