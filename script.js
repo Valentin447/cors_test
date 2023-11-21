@@ -21,23 +21,23 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 37`);
+console.log(`версия = 38`);
 
-if (code) {
-  fetch(
-    `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
-    {
-      method: "POST",
-    }
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.access_token) {
-        document.cookie = `access_token=${data.access_token}`;
-        authorization = `Bearer ${data.access_token}`;
-      }
-    });
-}
+// if (code) {
+//   fetch(
+//     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
+//     {
+//       method: "POST",
+//     }
+//   )
+//     .then((res) => res.json())
+//     .then((data) => {
+//       if (data.access_token) {
+//         document.cookie = `access_token=${data.access_token}`;
+//         authorization = `Bearer ${data.access_token}`;
+//       }
+//     });
+// }
 
 async function fetchPhotos() {
   try {
@@ -51,9 +51,6 @@ async function fetchPhotos() {
       }
     );
     const photo = await response.json();
-
-    console.log(photo);
-
     return photo;
   } catch (error) {
     console.error("Ошибка при загрузке фотографий:", error);
@@ -84,53 +81,13 @@ loadPhoto();
 buttonLikeEl.addEventListener("click", () => {
   if (getTokenFromCookie()) {
     if (buttonLikeEl.textContent === "Поставить лайк") {
-      fetch(
-        `https://api.unsplash.com/photos/${
-          JSON.parse(localStorage.getItem("photo")).id
-        }/like?client_id=${clientId}`,
-        {
-          method: "POST",
-          headers: {
-            Authorization: authorization,
-            "Accept-Version": "v1",
-          },
-        }
-      ).then((response) => {
-        if (response.ok) {
-          buttonLikeEl.textContent = `Убрать лайк`;
-          quantityLikeEl.textContent = `Лайков: ${
-            JSON.parse(localStorage.getItem("photo")).likes + 1
-          }`;
-        }
-      });
+      togleLike("POST");
     } else {
-      fetch(
-        `https://api.unsplash.com/photos/${
-          JSON.parse(localStorage.getItem("photo")).id
-        }/like?client_id=${clientId}`,
-        {
-          method: "DELETE",
-          headers: {
-            Authorization: authorization,
-            "Accept-Version": "v1",
-          },
-        }
-      ).then((response) => {
-        if (response.ok) {
-          buttonLikeEl.textContent = `Поставить лайк`;
-          quantityLikeEl.textContent = `Лайков: ${
-            JSON.parse(localStorage.getItem("photo")).likes
-          }`;
-        }
-      });
+      togleLike("DELETE");
     }
   } else {
     window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
   }
-});
-
-testEl.addEventListener("click", () => {
-  window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
 });
 
 function getTokenFromCookie() {
@@ -156,4 +113,33 @@ function setLocalStorage(photo) {
       alt: photo.alt_description,
     })
   );
+}
+
+function togleLike(method) {
+  fetch(
+    `https://api.unsplash.com/photos/${
+      JSON.parse(localStorage.getItem("photo")).id
+    }/like?client_id=${clientId}`,
+    {
+      method: method,
+      headers: {
+        Authorization: authorization,
+        "Accept-Version": "v1",
+      },
+    }
+  ).then((response) => {
+    if (response.ok) {
+      if (method === "POST") {
+        buttonLikeEl.textContent = `Убрать лайк`;
+        quantityLikeEl.textContent = `Лайков: ${
+          JSON.parse(localStorage.getItem("photo")).likes + 1
+        }`;
+      } else {
+        buttonLikeEl.textContent = `Поставить лайк`;
+        quantityLikeEl.textContent = `Лайков: ${
+          JSON.parse(localStorage.getItem("photo")).likes
+        }`;
+      }
+    }
+  });
 }
