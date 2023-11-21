@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 57`);
+console.log(`версия = 58`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -41,7 +41,7 @@ if (code && !getTokenFromCookie()) {
       console.log("33) " + data.access_token);
       if (data.access_token) {
         console.log("34) ");
-        document.cookie = `access_token=${data.access_token}; max-age=864000`;
+        document.cookie = `accessToken=${data.access_token}; max-age=864000`;
         authorization = `Bearer ${data.access_token}`;
       }
     })
@@ -126,8 +126,8 @@ function getTokenFromCookie() {
     console.log("62) " + cookie);
     const cookieArr = cookie.split("=");
     console.log("63) " + typeof(cookieArr[0]));
-    console.log(`66) ${cookieArr[0]} == "access_token" -> ${cookieArr[0] == "access_token"}`)
-    if (cookieArr[0] == "access_token") {
+    console.log(`66) ${cookieArr[0]} === "accessToken" -> ${cookieArr[0] === "accessToken"}`)
+    if (cookieArr[0] === "accessToken") {
       console.log("64) " + cookieArr[1]);
       return cookieArr[1];
     }
