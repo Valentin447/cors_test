@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 59`);
+console.log(`версия = 60`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -119,7 +119,9 @@ buttonLikeEl.addEventListener("click", () => {
 });
 
 function getTokenFromCookie() {
-  console.log("60) ");
+  console.log(`60) ${getCookie("accessToken")}`);
+
+
   const cookies = document.cookie.split(";");
   console.log("61) " + cookies);
   for (const cookie of cookies) {
@@ -135,7 +137,10 @@ function getTokenFromCookie() {
   console.log("65) ");
   return "";
 }
-
+function getCookie(name) {
+	var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
+	return matches ? decodeURIComponent(matches[1]) : undefined;
+}
 function setLocalStorage(photo) {
   window.localStorage.setItem(
     "photo",
