@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 47`);
+console.log(`версия = 48`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -169,8 +169,11 @@ function togleLike(method) {
 
 function timeNewPhoto(){
   const cookies = document.cookie.split(";");
+  console.log("1) " + cookies);
   for (const cookie of cookies) {
+    console.log("2) " + cookie);
     const cookieArr = cookie.split("=");
+    console.log("3) " + cookieArr);
     if (cookieArr[0] === "lifetime") {
       return false;
     }
