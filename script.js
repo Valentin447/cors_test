@@ -1,8 +1,5 @@
 "use strict";
 
-console.log(`версия = 61`);
-
-
 const photoEl = document.querySelector(".photo");
 const imgEl = document.querySelector(".photo__img");
 const textAutorEl = document.querySelector(".details__text-autor");
@@ -13,7 +10,7 @@ const testEl = document.querySelector(".test");
 
 let photoIsLiked = false;
 let authorization = `Bearer ${getTokenFromCookie()}`;
-let currentDate = new Date ();
+let currentDate = new Date();
 
 const urlParams = document.location.search;
 const searchParams = new URLSearchParams(urlParams);
@@ -25,11 +22,7 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-
-console.log("30) " + code);
-console.log("31) " + getTokenFromCookie());
 if (code && !getTokenFromCookie()) {
-  console.log("32) " + (code && !getTokenFromCookie()));
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
     {
@@ -38,9 +31,7 @@ if (code && !getTokenFromCookie()) {
   )
     .then((res) => res.json())
     .then((data) => {
-      console.log("33) " + data.access_token);
       if (data.access_token) {
-        console.log("34) ");
         document.cookie = `accessToken=${data.access_token}; max-age=864000`;
         authorization = `Bearer ${data.access_token}`;
       }
@@ -61,18 +52,14 @@ async function fetchPhotos() {
     }
   ).catch((error) => console.error("Ошибка при загрузке фотографий:", error));
   const photo = await response.json();
-  
+
   return photo;
 }
 
 async function loadPhoto() {
-  console.log(localStorage.getItem("photo"));
-  console.log(timeNewPhoto());
   if (localStorage.getItem("photo") && !timeNewPhoto()) {
-    console.log("старое фото");
     paintPhoto();
   } else {
-    console.log("новое фото");
     await fetchPhotos().then((res) => {
       setLocalStorage(res);
       paintPhoto();
@@ -98,18 +85,14 @@ function paintPhoto() {
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
-  console.log("10) " + getTokenFromCookie());
   if (getTokenFromCookie()) {
     if (buttonLikeEl.textContent === "Поставить лайк") {
-      console.log("11) " + buttonLikeEl.textContent);
       togleLike("POST");
     } else {
-      console.log("12) " + buttonLikeEl.textContent);
       togleLike("DELETE");
     }
   } else {
     try {
-      console.log("13)");
       window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
     } catch (error) {
       console.error("Ошибка при получении ключа авторизации:", error);
@@ -120,8 +103,14 @@ buttonLikeEl.addEventListener("click", () => {
 
 function getTokenFromCookie() {
   const name = "accessToken";
-  var matches = document.cookie.match(new RegExp("(?:^|; )" + name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, '\\$1') + "=([^;]*)"));
-	return matches ? decodeURIComponent(matches[1]) : undefined;
+  var matches = document.cookie.match(
+    new RegExp(
+      "(?:^|; )" +
+        name.replace(/([\.$?*|{}\(\)\[\]\\\/\+^])/g, "\\$1") +
+        "=([^;]*)"
+    )
+  );
+  return matches ? decodeURIComponent(matches[1]) : undefined;
 }
 
 function setLocalStorage(photo) {
@@ -139,7 +128,6 @@ function setLocalStorage(photo) {
 }
 
 function togleLike(method) {
-  console.log("20)" + method);
   fetch(
     `https://api.unsplash.com/photos/${
       JSON.parse(localStorage.getItem("photo")).id
@@ -172,13 +160,10 @@ function togleLike(method) {
     );
 }
 
-function timeNewPhoto(){
+function timeNewPhoto() {
   const cookies = document.cookie.split(";");
-  console.log("1) " + cookies);
   for (const cookie of cookies) {
-    console.log("2) " + cookie);
     const cookieArr = cookie.split("=");
-    console.log("3) " + cookieArr);
     if (cookieArr[0] === "lifetime") {
       return false;
     }
