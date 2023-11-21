@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 51`);
+console.log(`версия = 52`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -27,7 +27,7 @@ const grantType = "authorization_code";
 
 
 console.log("30) " + code);
-console.log("31) " + !getTokenFromCookie());
+console.log("31) " + getTokenFromCookie());
 if (code && !getTokenFromCookie()) {
   console.log("32) " + (code && !getTokenFromCookie()));
   fetch(
@@ -119,13 +119,19 @@ buttonLikeEl.addEventListener("click", () => {
 });
 
 function getTokenFromCookie() {
+  console.log("60) ");
   const cookies = document.cookie.split(";");
+  console.log("61) " + cookies);
   for (const cookie of cookies) {
+    console.log("62) " + cookie);
     const cookieArr = cookie.split("=");
+    console.log("63) " + cookieArr);
     if (cookieArr[0] === "access_token") {
+      console.log("64) " + cookieArr[1]);
       return cookieArr[1];
     }
   }
+  console.log("65) ");
   return "";
 }
 
