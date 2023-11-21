@@ -21,26 +21,25 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 40`);
+console.log(`версия = 41`);
 
-// if (code) {
-//   fetch(
-//     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
-//     {
-//       method: "POST",
-//     }
-//   )
-//     .then((res) => res.json())
-//     .then((data) => {
-//       if (data.access_token) {
-//         document.cookie = `access_token=${data.access_token}`;
-//         authorization = `Bearer ${data.access_token}`;
-//       }
-//     });
-// }
+if (code) {
+  fetch(
+    `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
+    {
+      method: "POST",
+    }
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.access_token) {
+        document.cookie = `access_token=${data.access_token}`;
+        authorization = `Bearer ${data.access_token}`;
+      }
+    });
+}
 
 async function fetchPhotos() {
-
   console.log("1");
 
   try {
@@ -62,7 +61,6 @@ async function fetchPhotos() {
 }
 
 async function loadPhoto() {
-
   console.log("2");
 
   await fetchPhotos().then((res) => {
@@ -85,7 +83,6 @@ async function loadPhoto() {
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
-
   console.log("3");
 
   if (getTokenFromCookie()) {
@@ -101,7 +98,6 @@ buttonLikeEl.addEventListener("click", () => {
 });
 
 function getTokenFromCookie() {
-
   console.log("5");
 
   const cookies = document.cookie.split(";");
@@ -115,7 +111,6 @@ function getTokenFromCookie() {
 }
 
 function setLocalStorage(photo) {
-
   console.log("6");
 
   console.log(photo.id);
@@ -136,7 +131,6 @@ function setLocalStorage(photo) {
       alt: photo.alt_description,
     })
   );
-
 }
 
 function togleLike(method) {
