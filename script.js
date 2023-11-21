@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 46`);
+console.log(`версия = 47`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -36,7 +36,7 @@ if (code && !getTokenFromCookie()) {
     .then((res) => res.json())
     .then((data) => {
       if (data.access_token) {
-        document.cookie = `access_token=${data.access_token}`;
+        document.cookie = `access_token=${data.access_token}; max-age=864000`;
         authorization = `Bearer ${data.access_token}`;
       }
     })
@@ -61,9 +61,13 @@ async function fetchPhotos() {
 }
 
 async function loadPhoto() {
+  console.log(localStorage.getItem("photo"));
+  console.log(timeNewPhoto());
   if (localStorage.getItem("photo") && !timeNewPhoto()) {
+    console.log("старое фото");
     paintPhoto();
   } else {
+    console.log("новое фото");
     await fetchPhotos().then((res) => {
       setLocalStorage(res);
       paintPhoto();
