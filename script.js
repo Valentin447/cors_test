@@ -21,7 +21,7 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 41`);
+console.log(`версия = 42`);
 
 if (code) {
   fetch(
@@ -41,7 +41,6 @@ if (code) {
 
 async function fetchPhotos() {
   console.log("1");
-
   try {
     const response = await fetch(
       `https://api.unsplash.com/photos/random?client_id=${clientId}`,
@@ -62,23 +61,30 @@ async function fetchPhotos() {
 
 async function loadPhoto() {
   console.log("2");
+  if(localStorage.getItem("photo")){
+    paintPhoto();
+  } else {
+    await fetchPhotos().then((res) => {
+      setLocalStorage(res);
+      paintPhoto();
+    });
+  }
+}
 
-  await fetchPhotos().then((res) => {
-    setLocalStorage(res);
-    imgEl.src = JSON.parse(localStorage.getItem("photo")).url;
-    imgEl.alt = JSON.parse(localStorage.getItem("photo")).alt;
-    textAutorEl.textContent = `Имя фотографа: ${
-      JSON.parse(localStorage.getItem("photo")).userName
-    }.`;
-    if (JSON.parse(localStorage.getItem("photo")).likedByUser) {
-      buttonLikeEl.textContent = `Убрать лайк`;
-    } else {
-      buttonLikeEl.textContent = `Поставить лайк`;
-    }
-    quantityLikeEl.textContent = `Лайков: ${
-      JSON.parse(localStorage.getItem("photo")).likes
-    }`;
-  });
+function paintPhoto(){
+  imgEl.src = JSON.parse(localStorage.getItem("photo")).url;
+  imgEl.alt = JSON.parse(localStorage.getItem("photo")).alt;
+  textAutorEl.textContent = `Имя фотографа: ${
+    JSON.parse(localStorage.getItem("photo")).userName
+  }.`;
+  if (JSON.parse(localStorage.getItem("photo")).likedByUser) {
+    buttonLikeEl.textContent = `Убрать лайк`;
+  } else {
+    buttonLikeEl.textContent = `Поставить лайк`;
+  }
+  quantityLikeEl.textContent = `Лайков: ${
+    JSON.parse(localStorage.getItem("photo")).likes
+  }`;
 }
 loadPhoto();
 
