@@ -21,26 +21,30 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 42`);
+console.log(`версия = 44`);
 
-if (code) {
-  fetch(
-    `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
-    {
-      method: "POST",
-    }
-  )
-    .then((res) => res.json())
-    .then((data) => {
-      if (data.access_token) {
-        document.cookie = `access_token=${data.access_token}`;
-        authorization = `Bearer ${data.access_token}`;
+if (code && !getTokenFromCookie()) {
+  try {
+    fetch(
+      `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
+      {
+        method: "POST",
       }
-    });
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.access_token) {
+          document.cookie = `access_token=${data.access_token}`;
+          authorization = `Bearer ${data.access_token}`;
+        }
+      });
+  } catch (error) {
+    console.error("Ошибка при получении токена авторизации:", error);
+    return undefined;
+  }
 }
 
 async function fetchPhotos() {
-  console.log("1");
   try {
     const response = await fetch(
       `https://api.unsplash.com/photos/random?client_id=${clientId}`,
@@ -60,8 +64,7 @@ async function fetchPhotos() {
 }
 
 async function loadPhoto() {
-  console.log("2");
-  if(localStorage.getItem("photo")){
+  if (localStorage.getItem("photo")) {
     paintPhoto();
   } else {
     await fetchPhotos().then((res) => {
@@ -71,7 +74,7 @@ async function loadPhoto() {
   }
 }
 
-function paintPhoto(){
+function paintPhoto() {
   imgEl.src = JSON.parse(localStorage.getItem("photo")).url;
   imgEl.alt = JSON.parse(localStorage.getItem("photo")).alt;
   textAutorEl.textContent = `Имя фотографа: ${
@@ -89,8 +92,6 @@ function paintPhoto(){
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
-  console.log("3");
-
   if (getTokenFromCookie()) {
     if (buttonLikeEl.textContent === "Поставить лайк") {
       togleLike("POST");
@@ -98,14 +99,16 @@ buttonLikeEl.addEventListener("click", () => {
       togleLike("DELETE");
     }
   } else {
-    console.log("4");
-    window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
+    try {
+      window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
+    } catch (error) {
+      console.error("Ошибка при получении ключа авторизации:", error);
+      return undefined;
+    }
   }
 });
 
 function getTokenFromCookie() {
-  console.log("5");
-
   const cookies = document.cookie.split(";");
   for (const cookie of cookies) {
     const cookieArr = cookie.split("=");
@@ -117,15 +120,6 @@ function getTokenFromCookie() {
 }
 
 function setLocalStorage(photo) {
-  console.log("6");
-
-  console.log(photo.id);
-  console.log(photo.urls.regular);
-  console.log(photo.likes);
-  console.log(photo.liked_by_user);
-  console.log(photo.user.name);
-  console.log(photo.alt_description);
-
   window.localStorage.setItem(
     "photo",
     JSON.stringify({
@@ -140,31 +134,35 @@ function setLocalStorage(photo) {
 }
 
 function togleLike(method) {
-  console.log("7");
-  fetch(
-    `https://api.unsplash.com/photos/${
-      JSON.parse(localStorage.getItem("photo")).id
-    }/like?client_id=${clientId}`,
-    {
-      method: method,
-      headers: {
-        Authorization: authorization,
-        "Accept-Version": "v1",
-      },
-    }
-  ).then((response) => {
-    if (response.ok) {
-      if (method === "POST") {
-        buttonLikeEl.textContent = `Убрать лайк`;
-        quantityLikeEl.textContent = `Лайков: ${
-          JSON.parse(localStorage.getItem("photo")).likes + 1
-        }`;
-      } else {
-        buttonLikeEl.textContent = `Поставить лайк`;
-        quantityLikeEl.textContent = `Лайков: ${
-          JSON.parse(localStorage.getItem("photo")).likes
-        }`;
+  try {
+    fetch(
+      `https://api.unsplash.com/photos/${
+        JSON.parse(localStorage.getItem("photo")).id
+      }/like?client_id=${clientId}`,
+      {
+        method: method,
+        headers: {
+          Authorization: authorization,
+          "Accept-Version": "v1",
+        },
       }
-    }
-  });
+    ).then((response) => {
+      if (response.ok) {
+        if (method === "POST") {
+          buttonLikeEl.textContent = `Убрать лайк`;
+          quantityLikeEl.textContent = `Лайков: ${
+            JSON.parse(localStorage.getItem("photo")).likes + 1
+          }`;
+        } else {
+          buttonLikeEl.textContent = `Поставить лайк`;
+          quantityLikeEl.textContent = `Лайков: ${
+            JSON.parse(localStorage.getItem("photo")).likes
+          }`;
+        }
+      }
+    });
+  } catch (error) {
+    console.error("Ошибка при попытки поставить лайк:", error);
+    return undefined;
+  }
 }

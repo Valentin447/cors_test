@@ -18,4 +18,10 @@
   flex-direction: column;
   align-items: center;
   padding: 10px;
+  font-size: 20px;
+  font-family: sans-serif;
+}
+
+.details__button-like{
+  padding: 10px 20px;
 }
