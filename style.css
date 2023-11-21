@@ -24,4 +24,7 @@
 
 .details__button-like{
   padding: 10px 20px;
+  font-size: 20px;
+  font-family: sans-serif;
+  border-radius: 5px;
 }

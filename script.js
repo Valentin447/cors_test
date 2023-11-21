@@ -1,5 +1,8 @@
 "use strict";
 
+console.log(`версия = 46`);
+
+
 const photoEl = document.querySelector(".photo");
 const imgEl = document.querySelector(".photo__img");
 const textAutorEl = document.querySelector(".details__text-autor");
@@ -10,6 +13,7 @@ const testEl = document.querySelector(".test");
 
 let photoIsLiked = false;
 let authorization = `Bearer ${getTokenFromCookie()}`;
+let currentDate = new Date ();
 
 const urlParams = document.location.search;
 const searchParams = new URLSearchParams(urlParams);
@@ -21,7 +25,6 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 45`);
 
 if (code && !getTokenFromCookie()) {
   fetch(
@@ -53,11 +56,12 @@ async function fetchPhotos() {
     }
   ).catch((error) => console.error("Ошибка при загрузке фотографий:", error));
   const photo = await response.json();
+  
   return photo;
 }
 
 async function loadPhoto() {
-  if (localStorage.getItem("photo")) {
+  if (localStorage.getItem("photo") && !timeNewPhoto()) {
     paintPhoto();
   } else {
     await fetchPhotos().then((res) => {
@@ -157,4 +161,16 @@ function togleLike(method) {
     .catch((error) =>
       console.error("Ошибка при попытки поставить лайк:", error)
     );
+}
+
+function timeNewPhoto(){
+  const cookies = document.cookie.split(";");
+  for (const cookie of cookies) {
+    const cookieArr = cookie.split("=");
+    if (cookieArr[0] === "lifetime") {
+      return false;
+    }
+  }
+  document.cookie = "lifetime=1day; max-age=86400";
+  return true;
 }
