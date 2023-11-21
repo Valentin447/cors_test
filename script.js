@@ -21,7 +21,7 @@ const redirectURI = "https%3A%2F%2Fvalentin447.github.io%2Fcors_test";
 const scope = "public+write_likes";
 const grantType = "authorization_code";
 
-console.log(`версия = 39`);
+console.log(`версия = 40`);
 
 // if (code) {
 //   fetch(
@@ -118,6 +118,13 @@ function setLocalStorage(photo) {
 
   console.log("6");
 
+  console.log(photo.id);
+  console.log(photo.urls.regular);
+  console.log(photo.likes);
+  console.log(photo.liked_by_user);
+  console.log(photo.user.name);
+  console.log(photo.alt_description);
+
   window.localStorage.setItem(
     "photo",
     JSON.stringify({
@@ -129,6 +136,7 @@ function setLocalStorage(photo) {
       alt: photo.alt_description,
     })
   );
+
 }
 
 function togleLike(method) {
