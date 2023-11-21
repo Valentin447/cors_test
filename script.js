@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 48`);
+console.log(`версия = 49`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -93,14 +93,18 @@ function paintPhoto() {
 loadPhoto();
 
 buttonLikeEl.addEventListener("click", () => {
+  console.log("10) " + getTokenFromCookie());
   if (getTokenFromCookie()) {
     if (buttonLikeEl.textContent === "Поставить лайк") {
+      console.log("11) " + buttonLikeEl.textContent);
       togleLike("POST");
     } else {
+      console.log("12) " + buttonLikeEl.textContent);
       togleLike("DELETE");
     }
   } else {
     try {
+      console.log("13)");
       window.location.href = `https://unsplash.com/oauth/authorize?redirect_uri=${redirectURI}&client_id=${clientId}&response_type=code&scope=${scope}`;
     } catch (error) {
       console.error("Ошибка при получении ключа авторизации:", error);
@@ -135,6 +139,7 @@ function setLocalStorage(photo) {
 }
 
 function togleLike(method) {
+  console.log("20)" + method);
   fetch(
     `https://api.unsplash.com/photos/${
       JSON.parse(localStorage.getItem("photo")).id
