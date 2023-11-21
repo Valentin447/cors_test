@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 49`);
+console.log(`версия = 50`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -26,6 +26,8 @@ const scope = "public+write_likes";
 const grantType = "authorization_code";
 
 
+console.log("30) " + code);
+console.log("31) " + !getTokenFromCookie());
 if (code && !getTokenFromCookie()) {
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
