@@ -1,6 +1,6 @@
 "use strict";
 
-console.log(`версия = 50`);
+console.log(`версия = 51`);
 
 
 const photoEl = document.querySelector(".photo");
@@ -29,6 +29,7 @@ const grantType = "authorization_code";
 console.log("30) " + code);
 console.log("31) " + !getTokenFromCookie());
 if (code && !getTokenFromCookie()) {
+  console.log("32) " + (code && !getTokenFromCookie()));
   fetch(
     `https://unsplash.com/oauth/token?client_id=${clientId}&client_secret=${clientSecret}&redirect_uri=${redirectURI}&code=${code}&grant_type=${grantType}`,
     {
@@ -37,7 +38,9 @@ if (code && !getTokenFromCookie()) {
   )
     .then((res) => res.json())
     .then((data) => {
+      console.log("33) " + data.access_token);
       if (data.access_token) {
+        console.log("34) ");
         document.cookie = `access_token=${data.access_token}; max-age=864000`;
         authorization = `Bearer ${data.access_token}`;
       }
